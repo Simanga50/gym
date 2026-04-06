@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IronForge Gym — Dublin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card: #181818;
+      --red: #e63024;
+      --red-dark: #b71c14;
+      --white: #f5f5f0;
+      --grey: #888;
+      --light-grey: #bbb;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #222;
+    }
+
+    .logo-text {
+      font-size: 2rem;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .logo-text span { color: var(--red); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--light-grey);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: .45rem 1.2rem;
+      border-radius: 2px;
+    }
+    .nav-cta:hover { background: var(--red-dark); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 7rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(230,48,36,0.12) 0%, transparent 60%),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(255,255,255,0.015) 40px,
+          rgba(255,255,255,0.015) 41px
+        );
+    }
+
+    .hero-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1rem;
+      animation: fadeUp .6s ease both;
+    }
+
+    #hero h1 {
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.95;
+      max-width: 900px;
+      animation: fadeUp .7s .1s ease both;
+    }
+
+    #hero h1 em {
+      font-style: normal;
+      color: var(--red);
+      -webkit-text-stroke: 2px var(--red);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--light-grey);
+      max-width: 500px;
+      margin-top: 1.5rem;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      animation: fadeUp .7s .3s ease both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .85rem 2.2rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid #333;
+    }
+    .btn-outline:hover { border-color: var(--red); color: var(--red); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+      animation: fadeUp .7s .4s ease both;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 5rem 2.5rem; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: .5rem;
+    }
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .section-body {
+      color: var(--light-grey);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-image {
+      aspect-ratio: 4/5;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--grey);
+      letter-spacing: .1em;
+      border: 1px solid #2a2a2a;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(230,48,36,0.08), transparent);
+    }
+    .about-image span { position: relative; z-index: 1; }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .feature-chip {
+      background: var(--card);
+      border: 1px solid #252525;
+      padding: .75rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--light-grey);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .feature-chip .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+
+    /* ── CLASSES ── */
+    #classes { background: var(--black); }
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5px;
+      background: #1a1a1a;
+      border: 1px solid #1a1a1a;
+      margin-top: 2.5rem;
+    }
+    .class-card {
+      background: var(--card);
+      padding: 2rem 1.8rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .class-card:hover { background: #202020; }
+    .class-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .class-card h3 {
+      font-size: 1.6rem;
+      margin-bottom: .5rem;
+    }
+    .class-card p {
+      font-size: 0.85rem;
+      color: var(--grey);
+      line-height: 1.5;
+    }
+    .class-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: rgba(230,48,36,0.1);
+      padding: .25rem .65rem;
+    }
+
+    /* ── TRAINERS ── */
+    #trainers { background: var(--dark); }
+    .trainers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .trainer-card {
+      background: var(--card);
+      border: 1px solid #222;
+      overflow: hidden;
+    }
+    .trainer-photo {
+      aspect-ratio: 3/4;
+      background: #1e1e1e;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 1rem;
+      font-size: 0.75rem;
+      color: var(--grey);
+      position: relative;
+    }
+    .trainer-photo::before {
+      content: '📷 TRAINER PHOTO';
+      font-size: 0.7rem;
+      letter-spacing: .08em;
+      color: #444;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .trainer-photo .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+    }
+    .trainer-info {
+      padding: 1.2rem 1.4rem;
+    }
+    .trainer-name {
+      font-size: 1.5rem;
+      margin-bottom: .2rem;
+    }
+    .trainer-role {
+      font-size: 0.78rem;
+      color: var(--red);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .trainer-bio {
+      font-size: 0.82rem;
+      color: var(--grey);
+      margin-top: .6rem;
+      line-height: 1.5;
+    }
+
+    /* ── PRICING ── */
+    #pricing { background: var(--black); text-align: center; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 960px;
+      margin: 2.5rem auto 0;
+      text-align: left;
+    }
+    .price-card {
+      background: var(--card);
+      border: 1px solid #222;
+      padding: 2.5rem 2rem;
+      position: relative;
+    }
+    .price-card.featured {
+      border-color: var(--red);
+    }
+    .featured-badge {
+      position: absolute;
+      top: -1px; right: 1.5rem;
+      background: var(--red);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      color: #fff;
+    }
+    .plan-name {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: .5rem;
+    }
+    .plan-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--white);
+    }
+    .plan-price sub {
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      color: var(--grey);
+      vertical-align: super;
+      font-weight: 600;
+    }
+    .plan-price span {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      color: var(--grey);
+    }
+    .plan-perks {
+      list-style: none;
+      margin: 1.5rem 0 2rem;
+    }
+    .plan-perks li {
+      font-size: 0.87rem;
+      color: var(--light-grey);
+      padding: .45rem 0;
+      border-bottom: 1px solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .plan-perks li::before { content: '✓'; color: var(--red); font-weight: 700; }
+
+    /* ── TIMETABLE ── */
+    #timetable { background: var(--dark); }
+    .timetable-wrap { overflow-x: auto; margin-top: 2.5rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+      font-size: 0.85rem;
+    }
+    th {
+      background: #1a1a1a;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .05em;
+      color: var(--grey);
+      padding: .9rem 1.2rem;
+      text-align: left;
+      border-bottom: 1px solid #252525;
+    }
+    td {
+      padding: .8rem 1.2rem;
+      border-bottom: 1px solid #1c1c1c;
+      color: var(--light-grey);
+      vertical-align: top;
+    }
+    tr:hover td { background: #161616; }
+    .timetable-class {
+      font-weight: 700;
+      color: var(--white);
+      display: block;
+    }
+    .timetable-trainer { font-size: 0.78rem; color: var(--grey); }
+    .badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .2rem .55rem;
+      border-radius: 2px;
+    }
+    .badge-red { background: rgba(230,48,36,.15); color: var(--red); }
+    .badge-green { background: rgba(36,180,100,.12); color: #24b464; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-detail {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--card);
+      border: 1px solid #252525;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+    .contact-value {
+      font-size: 0.95rem;
+      color: var(--white);
+      margin-top: .2rem;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-form input,
+    .contact-form textarea {
+      background: var(--card);
+      border: 1px solid #252525;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      padding: .85rem 1.1rem;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: #444; }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--red); }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+
+    /* ── MAP PLACEHOLDER ── */
+    .map-placeholder {
+      background: var(--card);
+      border: 1px solid #222;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--grey);
+      letter-spacing: .08em;
+      margin-top: 2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #070707;
+      border-top: 1px solid #1a1a1a;
+      padding: 3rem 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+    }
+    footer h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: .5rem; }
+    footer ul a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.87rem;
+      transition: color .2s;
+    }
+    footer ul a:hover { color: var(--red); }
+    .footer-copy {
+      grid-column: 1/-1;
+      border-top: 1px solid #1a1a1a;
+      padding-top: 1.5rem;
+      margin-top: .5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--grey);
+    }
+    .social-links { display: flex; gap: 1rem; }
+    .social-links a {
+      color: var(--grey);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .social-links a:hover { color: var(--red); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #about, #contact { grid-template-columns: 1fr; }
+      #hero h1 { font-size: 3.8rem; }
+      footer { grid-template-columns: 1fr 1fr; }
+      .footer-copy { flex-direction: column; gap: .8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="logo-text">IRON<span>FORGE</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#timetable">Timetable</a></li>
+    <li><a href="#contact" class="nav-cta">Join Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-label">📍 Dublin City Centre · Est. 2014</p>
+  <h1>FORGE<br>YOUR <em>BEST</em><br>SELF.</h1>
+  <p class="hero-sub">Dublin's most results-driven gym. Strength training, group classes, personal coaching — all under one roof on Thomas Street.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn btn-primary">Start Free Trial</a>
+    <a href="#classes" class="btn btn-outline">View Classes</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">1,200+</div>
+      <div class="stat-label">Active Members</div>
+    </div>
+    <div>
+      <div class="stat-num">18</div>
+      <div class="stat-label">Group Classes / Week</div>
+    </div>
+    <div>
+      <div class="stat-num">8</div>
+      <div class="stat-label">Expert Trainers</div>
+    </div>
+    <div>
+      <div class="stat-num">12K</div>
+      <div class="stat-label">Sq Ft Facility</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-image">
+    <span>[ GYM INTERIOR PHOTO ]</span>
+  </div>
+  <div>
+    <p class="section-label">About IronForge</p>
+    <h2 class="section-title">BUILT FOR<br>REAL RESULTS</h2>
+    <p class="section-body">IronForge has been Dublin's go-to strength and conditioning gym since 2014. Located in the heart of Thomas Street, we combine state-of-the-art equipment with expert coaching to help every member — beginner or elite — reach their goals.</p>
+    <p class="section-body">We believe great fitness isn't about extremes. It's about consistency, community, and the right guidance. Our coaches build personalised programmes and our floor is always staffed so you're never training alone.</p>
+    <div class="about-features">
+      <div class="feature-chip"><span class="dot"></span> Free Weights Zone</div>
+      <div class="feature-chip"><span class="dot"></span> Olympic Lifting Platform</div>
+      <div class="feature-chip"><span class="dot"></span> Cardio Suite</div>
+      <div class="feature-chip"><span class="dot"></span> Functional Training Rig</div>
+      <div class="feature-chip"><span class="dot"></span> Sauna &amp; Recovery</div>
+      <div class="feature-chip"><span class="dot"></span> Nutrition Bar</div>
+      <div class="feature-chip"><span class="dot"></span> Secure Lockers</div>
+      <div class="feature-chip"><span class="dot"></span> Open 5am – Midnight</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLASSES -->
+<section id="classes">
+  <p class="section-label">What We Offer</p>
+  <h2 class="section-title">OUR CLASSES</h2>
+  <p class="section-body">From high-intensity conditioning to mobility and recovery — there's a class for every goal and level.</p>
+  <div class="classes-grid">
+    <div class="class-card">
+      <div class="class-icon">🏋️</div>
+      <h3>Barbell Club</h3>
+      <p>Master the squat, bench, and deadlift with structured progressive programming. Suitable for all levels.</p>
+      <span class="class-tag">Strength</span>
+    </div>
+    <div class="class-card">
+      <div class="class-icon">⚡</div>
+      <h3>HIIT Circuit</h3>
+      <p>45 minutes of intervals, stations, and sweat. Maximum calorie burn and cardiovascular conditioning.</p>
+      <span class="class-tag">Cardio</span>
+    </div>
+    <div class="class-card">
+      <div class="class-icon">🥊</div>
+      <h3>Boxing Fit</h3>
+      <p>Non-contact boxing training for fitness. Improve coordination, power, and mental toughness.</p>
+      <span class="class-tag">Combat</span>
+    </div>
+    <div class="class-card">
+      <div class="class-icon">🧘</div>
+      <h3>Yoga &amp; Mobility</h3>
+      <p>Improve flexibility, reduce injury risk, and recover faster. Perfect as a standalone or complement.</p>
+      <span class="class-tag">Recovery</span>
+    </div>
+    <div class="class-card">
+      <div class="class-icon">🔥</div>
+      <h3>CrossFit-Style WOD</h3>
+      <p>Workout of the Day — constantly varied, high intensity. Builds well-rounded functional fitness.</p>
+      <span class="class-tag">Functional</span>
+    </div>
+    <div class="class-card">
+      <div class="class-icon">🏃</div>
+      <h3>Spin Class</h3>
+      <p>Ride to the beat. 45-minute indoor cycling sessions with motivating instructors and great playlists.</p>
+      <span class="class-tag">Cardio</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section id="trainers">
+  <p class="section-label">Meet the Team</p>
+  <h2 class="section-title">YOUR COACHES</h2>
+  <p class="section-body">All IronForge coaches are fully certified, experienced, and passionate about your progress.</p>
+  <div class="trainers-grid">
+    <div class="trainer-card">
+      <div class="trainer-photo"><div class="overlay"></div></div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Ciarán Murphy</h3>
+        <div class="trainer-role">Head Coach · Strength &amp; Conditioning</div>
+        <p class="trainer-bio">10 years coaching experience. NSCA certified. Former All-Ireland GAA footballer. Specialises in sport-specific strength.</p>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-photo"><div class="overlay"></div></div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Aoife Kelly</h3>
+        <div class="trainer-role">PT · Nutrition &amp; Weight Loss</div>
+        <p class="trainer-bio">Certified nutritionist and personal trainer. Transformed 300+ clients. Evidence-based, no-fad approach to fat loss.</p>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-photo"><div class="overlay"></div></div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Declan Brennan</h3>
+        <div class="trainer-role">Boxing &amp; HIIT Coach</div>
+        <p class="trainer-bio">Former amateur boxing champion. Makes every class intense, fun, and technically sound. Energy like no other.</p>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-photo"><div class="overlay"></div></div>
+      <div class="trainer-info">
+        <h3 class="trainer-name">Siobhán Walsh</h3>
+        <div class="trainer-role">Yoga &amp; Mobility Specialist</div>
+        <p class="trainer-bio">500hr RYT certified. Works with athletes and desk workers alike to restore movement and reduce pain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-label">Membership Plans</p>
+  <h2 class="section-title">SIMPLE PRICING</h2>
+  <p class="section-body" style="margin: 0 auto 0;">No hidden fees. Cancel any time. First week free for new members.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sub>€</sub>35<span>/mo</span></div>
+      <ul class="plan-perks">
+        <li>Full gym floor access</li>
+        <li>Locker &amp; shower use</li>
+        <li>2 group classes/week</li>
+        <li>App &amp; progress tracking</li>
+      </ul>
+      <a href="#contact" class="btn btn-outline" style="display:block;text-align:center;">Get Started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-badge">Most Popular</div>
+      <div class="plan-name">All-Access</div>
+      <div class="plan-price"><sub>€</sub>55<span>/mo</span></div>
+      <ul class="plan-perks">
+        <li>Everything in Starter</li>
+        <li>Unlimited group classes</li>
+        <li>1 PT session/month</li>
+        <li>Sauna &amp; recovery suite</li>
+        <li>Nutrition consultation</li>
+      </ul>
+      <a href="#contact" class="btn btn-primary" style="display:block;text-align:center;">Get Started</a>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Elite PT</div>
+      <div class="plan-price"><sub>€</sub>120<span>/mo</span></div>
+      <ul class="plan-perks">
+        <li>Everything in All-Access</li>
+        <li>4 personal training sessions</li>
+        <li>Custom nutrition plan</li>
+        <li>Priority class booking</li>
+        <li>Body composition scans</li>
+      </ul>
+      <a href="#contact" class="btn btn-outline" style="display:block;text-align:center;">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<!-- TIMETABLE -->
+<section id="timetable">
+  <p class="section-label">Weekly Schedule</p>
+  <h2 class="section-title">CLASS TIMETABLE</h2>
+  <p class="section-body">Book classes via the IronForge app or drop in. All times are subject to change — check the app for live updates.</p>
+  <div class="timetable-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Monday</th>
+          <th>Wednesday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>06:00</td>
+          <td><span class="timetable-class">Barbell Club</span><span class="timetable-trainer">Ciarán Murphy</span></td>
+          <td><span class="timetable-class">HIIT Circuit</span><span class="timetable-trainer">Aoife Kelly</span></td>
+          <td><span class="timetable-class">Barbell Club</span><span class="timetable-trainer">Ciarán Murphy</span></td>
+          <td><span class="timetable-class">Spin Class</span><span class="timetable-trainer">Declan Brennan</span></td>
+        </tr>
+        <tr>
+          <td>09:00</td>
+          <td><span class="timetable-class">Yoga &amp; Mobility</span><span class="timetable-trainer">Siobhán Walsh</span></td>
+          <td><span class="timetable-class">Boxing Fit</span><span class="timetable-trainer">Declan Brennan</span></td>
+          <td><span class="timetable-class">Yoga &amp; Mobility</span><span class="timetable-trainer">Siobhán Walsh</span></td>
+          <td><span class="timetable-class">Barbell Club</span><span class="timetable-trainer">Ciarán Murphy</span> <span class="badge badge-green">Open</span></td>
+        </tr>
+        <tr>
+          <td>12:30</td>
+          <td><span class="timetable-class">HIIT Circuit</span><span class="timetable-trainer">Aoife Kelly</span></td>
+          <td><span class="timetable-class">WOD</span><span class="timetable-trainer">Ciarán Murphy</span></td>
+          <td><span class="timetable-class">Boxing Fit</span><span class="timetable-trainer">Declan Brennan</span> <span class="badge badge-red">Full</span></td>
+          <td><span class="timetable-class">HIIT Circuit</span><span class="timetable-trainer">Aoife Kelly</span></td>
+        </tr>
+        <tr>
+          <td>18:00</td>
+          <td><span class="timetable-class">Boxing Fit</span><span class="timetable-trainer">Declan Brennan</span></td>
+          <td><span class="timetable-class">Barbell Club</span><span class="timetable-trainer">Ciarán Murphy</span></td>
+          <td><span class="timetable-class">WOD</span><span class="timetable-trainer">Ciarán Murphy</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>19:30</td>
+          <td><span class="timetable-class">Spin Class</span><span class="timetable-trainer">Declan Brennan</span></td>
+          <td><span class="timetable-class">Yoga &amp; Mobility</span><span class="timetable-trainer">Siobhán Walsh</span></td>
+          <td><span class="timetable-class">Spin Class</span><span class="timetable-trainer">Declan Brennan</span></td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <p class="section-label">Find Us</p>
+    <h2 class="section-title">GET IN<br>TOUCH</h2>
+    <p class="section-body">Questions about membership, classes, or personal training? Drop us a line or swing by — we'd love to show you around.</p>
+
+    <div class="contact-detail">
+      <div class="contact-icon">📍</div>
+      <div>
+        <div class="contact-label">Address</div>
+        <div class="contact-value">42 Thomas Street, Dublin 8, D08 XY12</div>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">📞</div>
+      <div>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">+353 1 555 0192</div>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">✉️</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">hello@ironforge.ie</div>
+      </div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">🕐</div>
+      <div>
+        <div class="contact-label">Opening Hours</div>
+        <div class="contact-value">Mon–Fri: 5:00am – 12:00am<br>Sat–Sun: 7:00am – 10:00pm</div>
+      </div>
+    </div>
+
+    <div class="map-placeholder">[ GOOGLE MAP EMBED — 42 Thomas Street, Dublin 8 ]</div>
+  </div>
+
+  <div>
+    <p class="section-label">Send a Message</p>
+    <h3 style="font-size:2rem; margin-bottom:1.5rem;">LET'S TALK</h3>
+    <div class="contact-form">
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Email Address" />
+      <input type="tel" placeholder="Phone Number (optional)" />
+      <textarea placeholder="Your message..."></textarea>
+      <button class="btn btn-primary">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <a href="#hero" class="logo-text" style="font-size:2.5rem;">IRON<span style="color:var(--red)">FORGE</span></a>
+    <p style="color:var(--grey);font-size:0.85rem;margin-top:.8rem;max-width:280px;line-height:1.6;">Dublin's premier strength and fitness facility. Built on community, driven by results.</p>
+  </div>
+  <div>
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#trainers">Trainers</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Gym</h4>
+    <ul>
+      <li><a href="#timetable">Timetable</a></li>
+      <li><a href="#">Book a Class</a></li>
+      <li><a href="#">Free Trial</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Legal</h4>
+    <ul>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms &amp; Conditions</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+    </ul>
+  </div>
+  <div class="footer-copy">
+    <span>© 2025 IronForge Gym Ltd. All rights reserved. · 42 Thomas Street, Dublin 8</span>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="#">TikTok</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
